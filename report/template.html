@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FlipItNews NLP Report</title>
+<style>
+:root{--blue:#2a78d6;--ink:#111827;--muted:#5b6474;--line:#e3e7ee;--soft:#f5f7fa;--green:#1baf7a;--orange:#e8590c;--violet:#7048e8;--pink:#d6336c}
+@page{size:A4;margin:15mm 13mm 16mm 13mm;
+  @bottom-left{content:"FlipItNews — News Article Classification  |  {{author}}";font:8pt "Segoe UI",Arial,sans-serif;color:#8a94a6}
+  @bottom-right{content:"Page " counter(page) " of " counter(pages);font:8pt "Segoe UI",Arial,sans-serif;color:#8a94a6}}
+@page cover{margin:0;@bottom-left{content:none}@bottom-right{content:none}}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:"Segoe UI",Arial,sans-serif;font-size:9.5pt;line-height:1.5;color:var(--ink);margin:0;background:#fff}
+h1,h2,h3{line-height:1.25;break-after:avoid}
+h1{font-size:19pt;margin:0 0 8px}
+h2{font-size:13.5pt;margin:18px 0 6px;padding-bottom:4px;border-bottom:2px solid var(--line)}
+h3{font-size:11pt;margin:13px 0 4px}
+p{margin:5px 0}
+a{color:var(--blue);text-decoration:none}
+code{font-family:Consolas,"Cascadia Mono",monospace;font-size:8.5pt;background:var(--soft);padding:0 3px;border-radius:3px}
+pre{margin:0}
+/* cover */
+.cover{page:cover;height:297mm;width:210mm;position:relative;overflow:hidden;
+  background:linear-gradient(155deg,#0b1220 0%,#111c33 55%,#153e75 100%);color:#fff;padding:26mm 20mm}
+.cover .tag{display:inline-block;font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:#9cc3f5;
+  border:1px solid #2d4f80;border-radius:20px;padding:4px 12px}
+.cover h1{font-size:34pt;font-weight:700;margin:20mm 0 4mm;line-height:1.08}
+.cover h1 span{color:#6aa8ff}
+.cover .sub{font-size:13pt;color:#c8d3e3;max-width:155mm}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14mm}
+.chip{border-radius:8px;padding:9px 13px;font-size:10pt;max-width:84mm;line-height:1.35}
+.chip b{display:block;font-size:8pt;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.c-bus{background:#2a78d6}.c-spo{background:#1baf7a}.c-pol{background:#7048e8}.c-tec{background:#d6336c}.c-ent{background:#e8590c}
+.kpis{display:flex;gap:10px;margin-top:14mm}
+.kpi{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:12px 14px}
+.kpi .v{font-size:22pt;font-weight:700}.kpi .l{font-size:8.5pt;color:#aebbd0;text-transform:uppercase;letter-spacing:.06em}
+.cover .meta{position:absolute;bottom:22mm;left:20mm;right:20mm;display:flex;justify-content:space-between;
+  border-top:1px solid rgba(255,255,255,.2);padding-top:10px;font-size:10pt;color:#c8d3e3}
+.cover .meta b{color:#fff;display:block;font-size:11.5pt}
+/* body */
+.toc ol{padding-left:18px;margin:6px 0}.toc li{margin:2px 0}.toc li span{color:var(--muted)}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:8.4pt}
+th{background:var(--ink);color:#fff;font-weight:600;text-align:left;padding:4px 6px}
+td{padding:3.5px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#fafbfd}
+tr{break-inside:avoid}
+.md{margin:4px 0}
+.md h1.part{font-size:19pt;color:#fff;background:linear-gradient(90deg,#0b1220,#153e75);margin:0 0 10px;
+  padding:14px 16px;border-radius:8px;break-before:page}
+.md h2::before{content:"";display:inline-block;width:6px;height:15px;background:var(--blue);border-radius:2px;
+  margin-right:8px;vertical-align:-2px}
+.md table{font-size:8.3pt}
+.cell{margin:6px 0 8px}
+.cin{display:flex;gap:6px;align-items:flex-start}
+.num{font:7.5pt Consolas,monospace;color:#8a94a6;min-width:36px;padding-top:6px;text-align:right}
+pre.code{flex:1;background:#f7f9fb;border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:4px;
+  padding:6px 9px;font:7.8pt/1.42 Consolas,"Cascadia Mono",monospace;white-space:pre-wrap;word-break:break-word}
+pre.out{margin:4px 0 0 42px;font:7.7pt/1.4 Consolas,monospace;color:#1f2a37;white-space:pre-wrap;word-break:break-word;
+  background:#fff;border:1px dashed #d5dce6;border-radius:4px;padding:5px 9px}
+pre.err{color:#b00020}
+.fig{margin:6px 0 0 42px;text-align:center;break-inside:avoid}.fig img{max-width:100%;max-height:120mm}
+.tbl{margin:4px 0 0 42px;overflow:hidden}
+.tbl table{font-size:7.5pt;width:auto;min-width:50%}
+.tbl th{background:#2c3640;font-size:7.5pt;padding:3px 6px}.tbl td{padding:2.5px 6px}
+{{pygments_css}}
+</style>
+</head>
+<body>
+<section class="cover">
+  <span class="tag">Business Case &middot; Natural Language Processing</span>
+  <h1>FlipItNews<br><span>News Article Classification</span></h1>
+  <p class="sub">Filing every article under Business, Politics, Sports, Technology or Entertainment automatically,
+    with text processing, Bag of Words / TF-IDF and six scikit-learn classifiers.</p>
+  <div class="chips">
+    <div class="chip c-bus"><b>Business</b>Shares rose after the central bank held rates steady</div>
+    <div class="chip c-spo"><b>Sports</b>The captain's century clinched the series</div>
+    <div class="chip c-tec"><b>Technology</b>The new smartphone ships with a faster chip</div>
+    <div class="chip c-pol"><b>Politics</b>The opposition walked out of parliament</div>
+    <div class="chip c-ent"><b>Entertainment</b>The film won best picture at the awards</div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="v">{{lr_acc}}</div><div class="l">Test accuracy, deployed model</div></div>
+    <div class="kpi"><div class="v">{{nb_acc}}</div><div class="l">Naive Bayes, simple approach</div></div>
+    <div class="kpi"><div class="v">99.8%</div><div class="l">Accuracy with editor review rule</div></div>
+    <div class="kpi"><div class="v">12</div><div class="l">Model + vectorizer pairs compared</div></div>
+  </div>
+  <div class="meta">
+    <div><b>{{author}}</b>Scaler Academy &middot; Business Case Submission</div>
+    <div style="text-align:right"><b>{{date}}</b>Python &middot; NLTK &middot; scikit-learn &middot; FastAPI &middot; Docker</div>
+  </div>
+</section>
+
+<section class="toc">
+<h1>Contents</h1>
+<ol>
+  <li><b>Executive summary</b></li>
+  <li><b>How this report maps to the evaluation criteria</b></li>
+  <li><b>Executed notebook</b> <span>— sections 1 to 9 below</span>
+    <ol><li>Libraries &amp; data · 2. Preliminary analysis · 3. Text processing (UDF, before / after) ·
+    4. Encoding, BoW / TF-IDF option, train-test split · 5. Naive Bayes · 6. Functionalised models ·
+    7. BoW vs TF-IDF, cross-validation, leakage check, errors, confidence, explainability · 8. Observations &amp;
+    recommendation · 9. Questionnaire</li></ol></li>
+</ol>
+
+<h2>1. Executive summary</h2>
+{{summary}}
+
+<h2>2. How this report maps to the evaluation criteria</h2>
+<table>
+<thead><tr><th style="width:36%">Criterion (points)</th><th>Where it is addressed</th></tr></thead>
+<tbody>
+<tr><td>1. Importing the libraries &amp; reading the data (10)</td><td>§1: all libraries, versions, NLTK resources, reading the CSV</td></tr>
+<tr><td>2. Exploring the dataset (10)</td><td>§2.1 shape (2,225 × 2), data types, missing values, duplicates; §2.2 articles per category (table + charts); §2.3 article lengths; §3.3 top words &amp; word clouds per category</td></tr>
+<tr><td>3. Processing the textual data (30)</td><td>§3: user-defined functions for removing non-letters, tokenising, removing stopwords and POS-aware lemmatisation; §3.1 one article before / after with token counts per step, stemming vs lemmatisation; §3.2 all articles processed, parity check with the production package</td></tr>
+<tr><td>4. Encoding &amp; transforming the data (20)</td><td>§4.1 LabelEncoder; §4.2 Bag of Words and TF-IDF with a user option (<code>VECTORIZER</code>) and a toy example; §4.3 stratified 75:25 train-test split and shapes</td></tr>
+<tr><td>5. Model training &amp; evaluation (30)</td><td>§5 Naive Bayes, simple approach: classification report + confusion matrices; §6 functionalised <code>train_and_evaluate()</code>: Decision Tree, Nearest Neighbors, Random Forest (+ Logistic Regression, Linear SVM), reports, confusion matrices and comparison table; §7 BoW vs TF-IDF, 5-fold CV, leakage check, error analysis; §8 observations</td></tr>
+<tr><td>Questionnaire</td><td>§9: all nine questions answered</td></tr>
+</tbody></table>
+<p>Code, trained models, REST API, web app, Docker image and tests:
+<a href="https://github.com/dot-hpg/flipitnews-news-classification">github.com/dot-hpg/flipitnews-news-classification</a></p>
+</section>
+
+<section>{{notebook}}</section>
+</body>
+</html>

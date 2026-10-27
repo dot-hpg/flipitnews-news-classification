@@ -1,0 +1,98 @@
+{
+  "classes": [
+    "Business",
+    "Entertainment",
+    "Politics",
+    "Sports",
+    "Technology"
+  ],
+  "default": "logistic_regression__tfidf",
+  "metrics": {
+    "naive_bayes__bow": {
+      "model": "Naive Bayes",
+      "vectorizer": "bow",
+      "accuracy": 0.9767,
+      "precision_macro": 0.9757,
+      "recall_macro": 0.9769,
+      "f1_macro": 0.9761
+    },
+    "decision_tree__bow": {
+      "model": "Decision Tree",
+      "vectorizer": "bow",
+      "accuracy": 0.8384,
+      "precision_macro": 0.8411,
+      "recall_macro": 0.837,
+      "f1_macro": 0.8377
+    },
+    "nearest_neighbors__bow": {
+      "model": "Nearest Neighbors",
+      "vectorizer": "bow",
+      "accuracy": 0.9425,
+      "precision_macro": 0.9415,
+      "recall_macro": 0.9418,
+      "f1_macro": 0.9409
+    },
+    "random_forest__bow": {
+      "model": "Random Forest",
+      "vectorizer": "bow",
+      "accuracy": 0.9695,
+      "precision_macro": 0.9707,
+      "recall_macro": 0.9679,
+      "f1_macro": 0.9692
+    },
+    "logistic_regression__bow": {
+      "model": "Logistic Regression",
+      "vectorizer": "bow",
+      "accuracy": 0.9695,
+      "precision_macro": 0.9678,
+      "recall_macro": 0.9679,
+      "f1_macro": 0.9678
+    },
+    "naive_bayes__tfidf": {
+      "model": "Naive Bayes",
+      "vectorizer": "tfidf",
+      "accuracy": 0.9713,
+      "precision_macro": 0.9703,
+      "recall_macro": 0.971,
+      "f1_macro": 0.9706
+    },
+    "decision_tree__tfidf": {
+      "model": "Decision Tree",
+      "vectorizer": "tfidf",
+      "accuracy": 0.8564,
+      "precision_macro": 0.8564,
+      "recall_macro": 0.8545,
+      "f1_macro": 0.8546
+    },
+    "nearest_neighbors__tfidf": {
+      "model": "Nearest Neighbors",
+      "vectorizer": "tfidf",
+      "accuracy": 0.9731,
+      "precision_macro": 0.973,
+      "recall_macro": 0.972,
+      "f1_macro": 0.9723
+    },
+    "random_forest__tfidf": {
+      "model": "Random Forest",
+      "vectorizer": "tfidf",
+      "accuracy": 0.9695,
+      "precision_macro": 0.9705,
+      "recall_macro": 0.968,
+      "f1_macro": 0.969
+    },
+    "logistic_regression__tfidf": {
+      "model": "Logistic Regression",
+      "vectorizer": "tfidf",
+      "accuracy": 0.9803,
+      "precision_macro": 0.9794,
+      "recall_macro": 0.9797,
+      "f1_macro": 0.9795
+    }
+  },
+  "trained_on": {
+    "articles": 2126,
+    "date": "2026-10-27",
+    "sklearn": "1.9.1"
+  },
+  "evaluation": "Held-out stratified 25% test split (557 articles), random_state=42"
+}
